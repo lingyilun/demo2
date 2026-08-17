@@ -1,0 +1,194 @@
+.weather-dashboard {
+  position: relative;
+  min-height: 100vh;
+  background-color: #0b132b;
+  color: #e0f7fa;
+  padding: 2rem 1rem;
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+
+  .dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* 互動區域：左地圖、右按鈕 */
+.selection-interactive-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: center;
+
+  @media (min-width: 850px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .map-container {
+    width: 100%;
+    max-width: 60%;
+    background: rgba(16, 30, 54, 0.6);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 12px;
+    padding: 10px;
+
+    .taiwan-map-svg {
+      width: 100%;
+      height: auto;
+
+      .county-path {
+        fill: #1c2a48;
+        stroke: #00f2fe;
+        stroke-width: 1;
+        cursor: pointer;
+
+        /* ✨ 核心重點：控制 SVG 區域的原點與轉場效果 */
+        transform-box: fill-box;
+        /* 關鍵！讓中心點依據「該縣市區塊」計算 */
+        transform-origin: center;
+        /* 設定中心點為放大原點 */
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+          fill 0.25s ease,
+          stroke 0.25s ease,
+          filter 0.25s ease;
+
+        /* 🖱️ 滑鼠懸浮時的放大與高亮效果 */
+        &:hover {
+          fill: rgba(0, 242, 254, 0.55);
+          stroke: #ffffff;
+          stroke-width: 1.5;
+
+          /* 稍微放大 1.08 倍 (可依喜好調整，如 1.05 ~ 1.1) */
+          transform: scale(1.1);
+
+          /* 搭配霓虹科技感發光，效果更顯眼 */
+          filter: drop-shadow(0 0 12px rgba(0, 242, 254, 0.9));
+        }
+
+        /* 📌 被選中的縣市狀態 */
+        &.active {
+          fill: #00f2fe;
+          stroke: #ffffff;
+          stroke-width: 2;
+          filter: drop-shadow(0 0 10px #00f2fe);
+        }
+      }
+    }
+  }
+
+  .region-buttons {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 0.6rem;
+    width: 100%;
+  }
+}
+
+/* 科技風面板與按鈕 */
+.tech-panel {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 8px;
+  padding: 1.25rem;
+
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .step-badge {
+      background: #00f2fe;
+      color: #000;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 0.8rem;
+    }
+
+    .highlight-cyan {
+      color: #00f2fe;
+    }
+
+    .highlight-purple {
+      color: #b5179e;
+    }
+  }
+}
+
+.btn-sub {
+  margin-right: 10px;
+}
+
+.btn-tech {
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  color: #e0f7fa;
+  padding: 0.6rem 0.8rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    border-color: #00f2fe;
+    color: #ffffff;
+  }
+
+  &.active {
+    background: #00f2fe;
+    color: #000;
+    font-weight: bold;
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  }
+}
+
+/* 卡片結果 Grid */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+
+  .tech-card {
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(0, 242, 254, 0.3);
+    border-radius: 8px;
+    padding: 1rem;
+
+    .card-header {
+      border-bottom: 1px dashed rgba(0, 242, 254, 0.2);
+      padding-bottom: 0.5rem;
+      margin-bottom: 0.8rem;
+      font-size: 0.85rem;
+      color: #88a0c0;
+
+      .hud-label {
+        color: #00f2fe;
+        margin-right: 4px;
+      }
+    }
+
+    .metric-value {
+      font-size: 2.2rem;
+      font-weight: bold;
+      color: #00f2fe;
+
+      small {
+        font-size: 1rem;
+        margin-left: 4px;
+      }
+    }
+
+    .weather-desc-terminal {
+      font-size: 0.85rem;
+      color: #10b981;
+      margin-top: 0.5rem;
+      font-family: monospace;
+    }
+  }
+}

@@ -1,0 +1,122 @@
+<div class="weather-dashboard tech-theme">
+  <!-- 背景科技網格與光暈效果 -->
+  <div class="tech-grid-bg"></div>
+  <div class="glow-sphere sphere-1"></div>
+  <div class="glow-sphere sphere-2"></div>
+
+  <div class="dashboard-container">
+
+    <!-- 頁首標題區 -->
+    <header class="dashboard-header">
+      <div class="header-title-box">
+        <span class="hud-corner top-left"></span>
+        <span class="hud-corner top-right"></span>
+        <span class="status-indicator pulsing"></span>
+        <h2>臺灣縣市氣象監控台</h2>
+      </div>
+    </header>
+
+    <!-- 選擇區域 (地圖 + 按鈕) -->
+    <section class="control-section tech-panel">
+      <div class="section-title">
+        <span>選擇區域：<strong class="highlight-cyan">{{ chooseLocationName || '等待選擇' }}</strong></span>
+      </div>
+
+      <div class="selection-interactive-wrapper">
+        <!-- SVG 台灣地圖 -->
+        <div class="map-container">
+          <svg viewBox="0 0 800 1000" class="taiwan-map-svg">
+            <g class="counties">
+              @for (county of countyMapList; track county.name) {
+                <path
+                  [attr.d]="county.pathD"
+                  [attr.data-name]="county.name"
+                  class="county-path"
+                  [class.active]="chooseLocationName === county.name"
+                  (click)="chooseLocation(county.name)">
+                  <title>{{ county.name }}</title>
+                </path>
+              }
+            </g>
+          </svg>
+        </div>
+
+        <!-- 縣市選擇按鈕列表 -->
+        <div class="button-group region-buttons">
+          @for (location of locationArray; track location.LocationName) {
+            <button
+              type="button"
+              class="btn-tech"
+              [class.active]="chooseLocationName === location.LocationName"
+              (click)="chooseLocation(location.LocationName)">
+              <span class="btn-glitch-bg"></span>
+              <span class="btn-text">{{ location.LocationName }}</span>
+            </button>
+          }
+        </div>
+      </div>
+    </section>
+
+    @if (chooseLocationData) {
+      <!-- 選擇氣候要素 -->
+      <section class="control-section tech-panel fade-in">
+        <div class="section-title">
+          <span>選擇指標：<strong class="highlight-purple">{{ chooseWeatherName || '等待選擇' }}</strong></span>
+        </div>
+        <div class="button-group indicator-buttons">
+          @for (weathers of chooseLocationData?.WeatherElement; track weathers.ElementName) {
+            <button
+              type="button"
+              class="btn-tech btn-sub"
+              [class.active]="chooseWeatherName === weathers.ElementName"
+              (click)="chooseWeather(weathers)">
+              <span class="btn-text">{{ weathers.ElementName }}</span>
+            </button>
+          }
+        </div>
+      </section>
+
+      <!-- 氣候數據結果區 -->
+      <section class="data-results fade-in">
+        <div class="grid-cards">
+          @for (data of chooseWeatherData?.Time; track $index) {
+            <div class="weather-card tech-card">
+              <div class="card-glow-bar"></div>
+
+              <!-- 時間標籤 -->
+              <div class="card-header">
+                <div class="time-range mono">
+                  <div><span class="hud-label">START</span>{{ data.StartTime }}</div>
+                  <div><span class="hud-label">END</span>{{ data.EndTime }}</div>
+                </div>
+              </div>
+
+              <!-- 氣象數值 -->
+              <div class="card-body">
+                <div class="element-title-bar">
+                  <span class="element-title">{{ chooseWeatherData?.ElementName }}</span>
+                </div>
+
+                <div class="element-value-box">
+                  <!-- 通用主要數值顯示 -->
+                  <div class="metric-block">
+                    <span class="metric-value temp">
+                      {{ data.Value }}<small>{{ data.Unit }}</small>
+                    </span>
+                  </div>
+
+                  <!-- 補充描述 -->
+                  @if (data.Parameter) {
+                    <p class="weather-desc-terminal">> STATUS: {{ data.Parameter }}</p>
+                  }
+                </div>
+              </div>
+
+            </div>
+          }
+        </div>
+      </section>
+    }
+
+  </div>
+</div>

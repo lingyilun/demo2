@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   countyMapList: CountyFeature[] = [];
 
   // 請填入你的中央氣象署 API KEY
-  private readonly CWA_API_KEY = 'CWA-0DF49296-2C40-408C-AE52-17D1EE4F5728';
+  private readonly CWA_API_KEY = 'CWA-0DF49296-2C40-408C-AE52-17D1EE4F572s8';
 
   constructor(private http: HttpClient) {}
 
